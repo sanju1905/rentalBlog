@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= typeof title != 'undefined' ? title: 'FOODIE' %></title>
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,14 +16,14 @@
 <body>
     <div class="container-xxl px-md-5 bg-white shadow-lg">
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-            <h3 class="fw-bold">FOODIE</h3>
+            <h3 class="fw-bold"><img src="img/food.gif" style="height: 50px; width: 50px;" alt="Foodie" class="mb-2"/>FOODIE</h3>
             <!-- <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"><img src="" width="229" margin="68" alt="cooking bog">FOODIE</a> -->
 
  <ul class="nav  col-12 col-md-auto mb-2 justify-content-center mb-md-0">
 <li><a href="/" class="nav-link link-secondary px-2 category__link1">Home</a></li>
 <li><a href="/about" class="nav-link link-secondary px-2 category__link1">About</a></li>
 <li><a href="/submit-recipe" class="nav-link link-secondary px-2 category__link1">Submit</a></li>
-<li><a href="/contact" class="nav-link link-secondary px-2 category__link1">Contact</a></li>
+<li><a href="/cooking-videos" class="nav-link link-secondary px-2 category__link1">Browse-Cooking-Videos</a></li>
 
  </ul>
  <div class="col-md-4 text-end">
@@ -40,12 +41,12 @@
             <%- body -%>
         </main>
         <footer class="py-3 my-4">
-            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <!-- <ul class="nav justify-content-center border-bottom pb-3 mb-3">
               <li class="nav-item"><a href="#" class="nav-link px-2 text-muted category__link1">Home</a></li>
               <li class="nav-item"><a href="#" class="nav-link px-2 text-muted category__link1">About</a></li>
               <li class="nav-item"><a href="/submit-recipe" class="nav-link px-2 text-muted category__link1">Submit</a></li>
               <li class="nav-item"><a href="#" class="nav-link px-2 text-muted category__link1">Contact</a></li>
-            </ul>
+            </ul> -->
             <p class="text-center text-muted">© build by Sanjay-Kandula</p>
           </footer>
 

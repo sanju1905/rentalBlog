@@ -13,7 +13,8 @@ router.get('/explore-latest',recipeController.explorelatest);
 router.get('/random-recipe',recipeController.explorerandom);
 router.get('/submit-recipe',recipeController.exploresubmit);
 router.post('/submit-recipe',recipeController.exploresubmitonpost);
-
+router.get('/about',recipeController.exploreAbout)
+router.get('/cooking-videos',recipeController.explorecookingvideos)
 
 
 

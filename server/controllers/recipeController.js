@@ -177,6 +177,33 @@ res.render("search", { title: "cooking blog-Recipes",recipe});
   }
 };
 
+/**
+ * 
+ * About Company
+ * 
+ */
+exports.exploreAbout=async(req,res)=>{
+  try{
+    res.render("about",{title:"cooking blog-Recipes:About"}) ;
+  }
+ catch{
+  res.send(500)
+.send({message:error.message} || "Error Occured") }
+}
+
+
+/**
+ * Cooking Videos
+ */
+exports.explorecookingvideos=async(req,res)=>
+{
+  try {
+    res.render("cooking-videos",{title:"cooking blog-Recipes:Videos"});
+  } catch (error) {
+    res.send(500)
+    .send({message:error.message} || "Error Occured")
+  }
+}
 //Update the Recipe
 // async function updateRecipe(){
 //   try {

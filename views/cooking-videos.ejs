@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Cooking Videos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">All Cooking Videos</h1>
+        <div id="videos" class="row mt-5"></div>
+    </div>
+
+    <script>
+        const apiKey = 'AIzaSyCEmlNvvwCsZ30GFwTQ6Z3BzLdB9fBSMMU';
+        const channelId = 'UCfCmWM09Bmto-TcAi0oNwXg';
+
+ // UCk3JZr7eS3pg5AGEvBdEvFg-- Cooking
+        // UCfCmWM09Bmto-TcAi0oNwXg-- Sanjay
+        function fetchVideos(pageToken = '') {
+            const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=50&pageToken=${pageToken}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const videosDiv = document.getElementById('videos');
+                    let rowDiv;
+
+                    data.items.forEach((item, index) => {
+                        if (index % 2 === 0) {
+                            rowDiv = document.createElement('div');
+                            rowDiv.classList.add('row', 'mb-4');
+                        }
+
+                        const videoId = item.id.videoId;
+                        const videoTitle = item.snippet.title;
+
+                        const colDiv = document.createElement('div');
+                        colDiv.classList.add('col-md-6');
+
+                        const iframe = document.createElement('iframe');
+                        iframe.width = '100%';
+                        iframe.height = '315';
+                        iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                        iframe.frameBorder = '0';
+                        iframe.allowFullscreen = true;
+
+                        const videoTitleElement = document.createElement('p');
+                        videoTitleElement.textContent = videoTitle;
+
+                        colDiv.appendChild(iframe);
+                        colDiv.appendChild(videoTitleElement);
+                        rowDiv.appendChild(colDiv);
+
+                        if (index % 2 === 1 || index === data.items.length - 1) {
+                            videosDiv.appendChild(rowDiv);
+                        }
+                    });
+
+                    if (data.nextPageToken) {
+                        fetchVideos(data.nextPageToken);
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+
+        fetchVideos();
+    </script>
+</body>
+</html>
