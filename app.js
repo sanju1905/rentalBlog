@@ -5,7 +5,7 @@ const session=require('express-session')
 const flash=require('connect-flash')
 
 const app=express()
-const port=process.env.POST || 3000;
+const port=process.env.POST || 5173;
 require('dotenv').config();
 app.use(express.urlencoded({extended:true}))
 app.use(express.static('public'));
