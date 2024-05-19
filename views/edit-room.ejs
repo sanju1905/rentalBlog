@@ -1,0 +1,54 @@
+<div class="px-4 my-2 text-center">
+  <h1 class="display-5 fw-bold"></h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead">Edit Room Details</p>
+  </div>
+</div>
+
+
+<div class="row justify-content-center">
+  <div class="col-8">
+
+
+    <form action="/update-room/<%= room._id %>" enctype="multipart/form-data" method="post">
+
+      <div class="row g-3">
+
+        <div class="col-12">
+          <label for="recipe" class="form-label">First Name :</label>
+          <input type="text" class="form-control" name="firstname" id="firstname" value="<%= room.firstname %>" required />
+        </div>
+
+        <div class="col-12">
+          <label for="lastname" class="form-label">Last Name :</label>
+          <input type="text" name="lastname" class="form-control" required value="<%= room.lastname %>" />
+        </div>
+
+
+        <div class="col-12">
+          <label for="mail" class="form-label">Email :</label>
+          <input type="text" class="form-control" name="email" id="email" required value="<%= room.email %>" />
+        </div>
+
+        <div class="col-12">
+          <label for="phonenumber" class="form-label">Phone Number :</label>
+          <input type="text" class="form-control" name="phonenumber" id="phonenumber" value="<%= room.phonenumber %>" required />
+        </div>
+
+
+
+
+
+        <div class="col-12">
+          <label for="image">property picture :</label>
+          <input type="file" class="form-control" name="image" accept="image/*" value="<%= room.image %>" />
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">update Room</button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

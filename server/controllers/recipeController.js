@@ -1,6 +1,35 @@
 require("../models/database");
 const Category = require("../models/Category");
-const Recipe = require("../models/Recipe");
+const Room = require("../models/Room");
+const Register = require("../models/Register");
+const nodemailer=require('nodemailer');
+
+exports.email=async(req,res)=>{
+  const roomId = req.params.roomId;
+  try {
+    // Get room details
+    const room = await Room.findById(roomId);
+    
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      // Configure your email provider
+    });
+
+    // Send mail with defined transport object
+    const info = await transporter.sendMail({
+      from: 'sanjaykandula2001@gmail.com', // Sender address
+      to: room.email, // Buyer's email
+      subject: 'Interest in your property', // Subject line
+      text: 'Hi, I am interested in your property. Please contact me for further details.', // Plain text body
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+
 
 /**
  * Get /
@@ -9,19 +38,15 @@ const Recipe = require("../models/Recipe");
 
 exports.homepage = async (req, res) => {
   try {
-    const limitNumber = 5;
-    const Categories = await Category.find({}).limit(limitNumber);
-     const latest=await Recipe.find({}).sort({_id:-1}).limit(limitNumber);
-     const thai=await Recipe.find({'category':'Thai'}).limit(limitNumber);
-     const american=await Recipe.find({'category':'American'}).limit(limitNumber);
-     const chinese=await Recipe.find({'category':'Chinese'}).limit(limitNumber);
-    
-     const food={latest,thai,american,chinese}
-    res.render("index", { title: "cooking blog-Home", Categories,food });
+    // Fetch all rooms
+    const allRooms = await Room.find({});
+
+    res.render("index", { title: "Rooms", allRooms });
   } catch (error) {
-    res.status(500).send({ message: error.message } || "Error Ocurred");
+    res.status(500).send({ message: error.message } || "Error Occurred");
   }
 };
+
 
 /**
  * Get /
@@ -44,7 +69,7 @@ exports.explorecategories = async (req, res) => {
 exports.explorelatest = async (req, res) => {
   try {
     const limitNumber = 20;
-    const recipe = await Recipe.find({}).sort({_id: -1}).limit(limitNumber);
+    const recipe = await Room.find({}).sort({ _id: -1 }).limit(limitNumber);
 
     res.render("explore-latest", { title: "cooking blog-Latest", recipe });
   } catch (error) {
@@ -55,98 +80,94 @@ exports.explorelatest = async (req, res) => {
 /**
  *Submit Recipe
  */
- exports.exploresubmit = async (req, res) => {
+exports.exploresubmit = async (req, res) => {
   try {
-    const infoErrorObj=req.flash('infoError');
-    const infoSubmitObj=req.flash('infoSubmit');
+    const infoErrorObj = req.flash("infoError");
+    const infoSubmitObj = req.flash("infoSubmit");
 
-    res.render("submit-recipe", { title: "cooking blog-Latest",infoErrorObj,infoSubmitObj},);
+    res.render("submit-recipe", {
+      title: "cooking blog-Latest",
+      infoErrorObj,
+      infoSubmitObj,
+    });
   } catch (error) {
     res.status(500).send({ message: error.message } || "Error Ocurred");
   }
 };
-
 
 /**
  *Submit Recipe on Post
  */
- exports.exploresubmitonpost = async (req, res) => {
-try {
+exports.exploresubmitonpost = async (req, res) => {
+  try {
+    let imageUploadFile;
+    let uploadPath;
+    let newImageName;
 
-let imageUploadFile;
-let uploadPath;
-let newImageName;
+    if (!req.files || Object.keys(req.files).length === 0) {
+      console.log("No Files where uploaded.");
+    } else {
+      imageUploadFile = req.files.image;
+      newImageName = Date.now() + imageUploadFile.name;
 
-if(!req.files || Object.keys(req.files).length === 0){
-  console.log('No Files where uploaded.');
-} else {
+      uploadPath =
+        require("path").resolve("./") + "/public/uploads/" + newImageName;
 
-  imageUploadFile = req.files.image;
-  newImageName = Date.now() + imageUploadFile.name;
+      imageUploadFile.mv(uploadPath, function (err) {
+        if (err) return res.satus(500).send(err);
+      });
+    }
 
-  uploadPath = require('path').resolve('./') + '/public/uploads/' + newImageName;
+    const newRecipe = new Room({
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      email: req.body.email,
+      phonenumber:req.body.phonenumber,
+      image: newImageName,
+    });
+    await newRecipe.save();
 
-  imageUploadFile.mv(uploadPath, function(err){
-    if(err) return res.satus(500).send(err);
-  })
-
-}
-
-
-const newRecipe=new Recipe({
-name:req.body.name,
-description:req.body.description, 
-email:req.body.email,
-ingredients:req.body.ingredients,
-category:req.body.category,
-image:newImageName
-});
- await newRecipe.save();
-
-req.flash('infoSubmit','Recipe has been added')
-res.redirect('/submit-recipe')
-} catch (error) {
-  req.flash('infoError',error)
- res.redirect('/submit-recipe')
-}
-
-
-
-
-
-
+    req.flash("infoSubmit", "Room has been added");
+    res.redirect("/submit-recipe");
+  } catch (error) {
+    req.flash("infoError", error);
+    res.redirect("/submit-recipe");
+  }
 };
-
 
 /**
  *Random Items
  */
- exports.explorerandom = async (req, res) => {
+exports.explorerandom = async (req, res) => {
   try {
-  let count=await Recipe.find().countDocuments();
-  let random=Math.floor(Math.random() * count);
-  let recipe=await Recipe.findOne().skip(random).exec();
-    res.render("random-recipe", { title: "cooking blog-Random",recipe});
+    let count = await Room.find().countDocuments();
+    let random = Math.floor(Math.random() * count);
+    let recipe = await Room.findOne().skip(random).exec();
+    res.render("random-recipe", { title: "cooking blog-Random", recipe });
   } catch (error) {
     res.status(500).send({ message: error.message } || "Error Ocurred");
   }
 };
 
-
 /**
  * GET /categories/:id
  * Categories By Id
-*/
-exports.exploreCategoriesById = async(req, res) => { 
+ */
+exports.exploreCategoriesById = async (req, res) => {
   try {
     let categoryId = req.params.id;
     const limitNumber = 5;
-    const categoryById = await Recipe.find({ 'category': categoryId }).limit(limitNumber);
-    res.render('categories', { title: 'Cooking Blog - Categoreis', categoryById } );
+    const categoryById = await Recipe.find({ category: categoryId }).limit(
+      limitNumber
+    );
+    res.render("categories", {
+      title: "Cooking Blog - Categoreis",
+      categoryById,
+    });
   } catch (error) {
-    res.satus(500).send({message: error.message || "Error Occured" });
+    res.satus(500).send({ message: error.message || "Error Occured" });
   }
-} 
+};
 
 /**
  * Get /
@@ -154,13 +175,182 @@ exports.exploreCategoriesById = async(req, res) => {
  */
 exports.explorerecipe = async (req, res) => {
   try {
-let recipeId=req.params.id;
-const recipe= await Recipe.findById(recipeId) ;
-res.render("recipe", { title: "cooking blog-Recipes",recipe});
+    let recipeId = req.params.id;
+    const recipe = await Recipe.findById(recipeId);
+    res.render("recipe", { title: "cooking blog-Recipes", recipe });
   } catch (error) {
     res.status(500).send({ message: error.message } || "Error Ocurred");
   }
 };
+
+
+
+/**
+ * Register
+ */
+
+
+exports.register=async(req,res)=>{
+  try {
+    res.render('register', { title: "Register" })
+  } catch (error) {
+    res.status(500).send({ message: error.message } || "Error Ocurred");
+  }
+}
+
+exports.login=async(req,res)=>{
+  try {
+    res.render('login', { title: "Login" })
+  } catch (error) {
+    res.status(500).send({ message: error.message } || "Error Ocurred");
+  }
+}
+
+exports.delete = async (req, res) => {
+  try {
+    const roomId = req.params.roomId;
+    await Room.findByIdAndDelete(roomId);
+
+    // Fetch the remaining rooms
+    const allRooms = await Room.find({});
+
+    // Render the same page with the updated data
+    res.render("dashdisplay", { title: "Dashboard", allRooms });
+  } catch (error) {
+    res.status(500).send({ message: error.message } || "Error Occurred");
+  }
+};
+
+exports.edit=async(req,res)=>{
+  try {
+    const roomId = req.params.roomId;
+    const room = await Room.findById(roomId);
+    res.render('edit-room', { room }); // Render the edit page with room data
+  } catch (error) {
+    res.status(500).send({ message: error.message } || "Error Occurred");
+  }
+}
+
+// exports.update=async(req,res)=>{
+//   try {
+//     const roomId = req.params.roomId;
+//     await Room.findByIdAndUpdate(roomId, req.body);
+//     res.redirect('/dashboard'); // Redirect to dashboard after update
+//   } catch (error) {
+//     res.status(500).send({ message: error.message } || "Error Occurred");
+//   }
+// }
+exports.update = async (req, res) => {
+  try {
+    const roomId = req.params.roomId;
+    await Room.findByIdAndUpdate(roomId, req.body);
+
+    // Fetch the updated room data
+    const updatedRoom = await Room.findById(roomId);
+
+    // Find all rooms associated with the user's email and phone number
+    const { email, phonenumber } = req.body; // Assuming email and phonenumber are present in the form data
+    const rooms = await Room.find({ email, phonenumber });
+
+    // Render the dashboard display page with the updated room data and the remaining rooms
+    res.render('dashdisplay', { title: 'Display', rooms, updatedRoom });
+  } catch (error) {
+    res.status(500).send({ message: error.message } || "Error Occurred");
+  }
+};
+
+
+
+
+
+
+
+exports.dashboard=async(req,res)=>{
+  try {
+    res.render('dashboard', { title: "Login" })
+  } catch (error) {
+    res.status(500).send({ message: error.message } || "Error Ocurred");
+  }
+}
+
+
+
+
+
+/**
+ * Register obn post
+ */ 
+
+exports.registeronpost=async(req,res)=>{
+  const { firstname, lastname, email, phonenumber, category } = req.body;
+
+  try {
+    const newUser = new Register({
+      firstname,
+      lastname,
+      email,
+      phonenumber,
+      category,
+    });
+    await newUser.save();
+    res.render('register', { title: 'Register', infoSubmitObj: 'Registration successful!' });
+  } catch (error) {
+    res.render('register', { title: 'Register', infoErrorObj: [{ message: error.message }] });
+  }
+}
+
+
+exports.dashboardonpost = async (req, res) => {
+  const { email, phonenumber } = req.body;
+  
+  try {
+    // Find the user by email and phone number
+    const user = await Register.findOne({ email, phonenumber });
+    
+    if (!user) {
+      // If user not found, render error message on dashboard login page
+      return res.render('dashboard', { title: 'Dashboard login', infoErrorObj: [{ message: 'User not found.' }] });
+    }
+    
+    // If user found, find all rooms associated with the user's email and phone number
+    const rooms = await Room.find({ email, phonenumber });
+
+    // Render the dashboard display page with the rooms data
+    res.render('dashdisplay', { title: 'Display', rooms });
+  } catch (error) {
+    // If any error occurs, render error message on dashboard login page
+    res.render('dashboard', { title: 'Dashboard login', infoErrorObj: [{ message: error.message }] });
+  }
+};
+
+
+/** 
+ * Login on submit
+*/
+
+exports.loginonpost=async(req,res)=>{
+  const{email,phonenumber,category}=req.body;
+  try {
+    const user = await Register.findOne({ email, phonenumber, category });
+    if(user){
+      if (category === 'Thai') {
+        res.redirect('/');
+      } else if (category === 'American') {
+        res.redirect('/submit-recipe');
+      } else {
+        // Handle other categories if needed
+        res.redirect('/register');
+      }
+    }
+    else {
+      res.render('login', { title: 'Login', infoErrorObj: [{ message: 'Invalid login credentials.' }] });
+    }
+  } catch (error) {
+    res.render('login', { title: 'Login', infoErrorObj: [{ message: error.message }] });
+  }
+}
+
+
 
 /**
  * Search /
@@ -168,42 +358,30 @@ res.render("recipe", { title: "cooking blog-Recipes",recipe});
  */
 exports.exploresearch = async (req, res) => {
   try {
-//Searh Term
-let searchTerm=req.body.searchTerm;
-const recipe=await Recipe.find({$text:{$search:searchTerm , $diacriticSensitive:true}});
-res.render("search", { title: "cooking blog-Recipes",recipe});
+    //Searh Term
+    let searchTerm = req.body.searchTerm;
+    const recipe = await Recipe.find({
+      $text: { $search: searchTerm, $diacriticSensitive: true },
+    });
+    res.render("search", { title: "cooking blog-Recipes", recipe });
   } catch (error) {
     res.status(500).send({ message: error.message } || "Error Ocurred");
   }
 };
 
 /**
- * 
+ *
  * About Company
- * 
+ *
  */
-exports.exploreAbout=async(req,res)=>{
-  try{
-    res.render("about",{title:"cooking blog-Recipes:About"}) ;
-  }
- catch{
-  res.send(500)
-.send({message:error.message} || "Error Occured") }
-}
-
-
-/**
- * Cooking Videos
- */
-exports.explorecookingvideos=async(req,res)=>
-{
+exports.exploreAbout = async (req, res) => {
   try {
-    res.render("cooking-videos",{title:"cooking blog-Recipes:Videos"});
-  } catch (error) {
-    res.send(500)
-    .send({message:error.message} || "Error Occured")
+    res.render("about", { title: "cooking blog-Recipes:About" });
+  } catch {
+    res.send(500).send({ message: error.message } || "Error Occured");
   }
-}
+};
+
 //Update the Recipe
 // async function updateRecipe(){
 //   try {
@@ -225,7 +403,6 @@ exports.explorecookingvideos=async(req,res)=>
 //   }
 // }
 // deleteRecipe();
-
 
 // async function insertDynamicCategoruData(){
 //     try {

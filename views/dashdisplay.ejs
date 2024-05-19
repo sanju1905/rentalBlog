@@ -1,0 +1,22 @@
+<!-- Room Cards -->
+<div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+    <% rooms.forEach(function(room) { %>
+    <div class="col">
+      <div class="card h-100">
+        <img src="/uploads/<%= room.image %>" class="card-img-top" alt="<%= room.firstname %>">
+        <div class="card-body">
+          <h5 class="card-title"><%= room.firstname %></h5>
+          <p class="card-text"><strong>Email:</strong> <%= room.email %></p>
+          <p class="card-text"><strong>Phone Number:</strong> <%= room.phonenumber.join(', ') %></p>
+          <!-- Edit Button -->
+          <a href="/edit-room/<%= room._id %>" class="btn btn-primary btn-sm">Edit</a>
+          <!-- Delete Button -->
+          <form action="/delete-room/<%= room._id %>" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+  

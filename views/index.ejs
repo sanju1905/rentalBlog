@@ -1,10 +1,10 @@
-<div class="row flex-lg-row-reverse align-items-center g-5 py-4 mb-4 ">
+<div class="row flex-lg-row-reverse align-items-center g-5 py-4 mb-4">
   <div class="col-12 col-lg-6">
-    <img src="/img/hero-image.png" width="607" height="510" class=" mx-lg-auto img-fluid" loading="lazy" alt="Cooking-Blog">
+    <img src="/img/hero-image.png" width="607" height="510" class="mx-lg-auto img-fluid" loading="lazy" alt="Cooking-Blog">
   </div>
   <div class="col-12 col-lg-6">
-    <h1 class="display-5 fw-bold mb-3">Huge collection of delicious recipee ideas</h1>
-    <p class="lead ">Explore our huge collection of delicios recipe ideas including : easy deserts,delicious vegan and vegetarian dinner ideas,gorgeous pasta recipes.quick bakes,family-friendly meals and gluten-free recipes</p>
+    <h1 class="display-5 fw-bold mb-3">Never Search for a Room instead select a Room</h1>
+    <p class="lead">Explore a huge number of Rooms and select any of your wishes with Reasonable prices</p>
     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
       <a href="/explore-latest" class="btn btn-primary btn-dark btn-lg px-4 me-md-2">Explore Latest</a>
       <a href="/random-recipe" class="btn btn-outline-secondary btn-lg px-4 me-md-2">Show Random</a>
@@ -12,151 +12,74 @@
   </div>
 </div>
 
-<div class="row row-cols-2 row-cols-lg-6 g-lg-3 py-4">
-  <% if(Categories != ""){%>
-    <% Categories.forEach(function(category,index){ %>
-  <a href="./categories" class="text-center category__link">
-    <div class="category__img shadow">
-      <img src="img/<%- category.image %>" alt="<%- category.name %>" loading="lazy">
-    </div>
-    <div class="pt-1"><%- category.name %> </div>
-  </a>
-  <% }) %>
-  <% } else{ %>
-    <p>No Items Found</p>
-  <% } %>
-
-<a href="./categories" class="text-center category__link">
-  <div class="category__img shadow">
-    <img src="img/view-all.jpg" alt="View All" loading="lazy">
-  </div>
-  <div class="pt-1">View All </div>
-</a>
-</div>
-
-
-
-<!-- Latest food items -->
+<!-- Latest Rooms -->
 <section class="pt-4 pb-4">
   <div class="d-flex align-items-center mb-2">
-    <h1 class="fw-bold">Latest Recipes</h1>
+    <h1 class="fw-bold">Latest Rooms</h1>
+    <!-- Link to view more -->
     <a href="/explore-latest" class="ms-auto">View More</a>
   </div>
 
-
-  <div class=" row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-   <% if(food != ""){ %>
-    <% food.latest.forEach(function(recipe,index){ %>
-    <a href="/recipe/<%= recipe._id %>" class="col text-center category__link">
-      <div class="category__img  category__img--large shadow">
-        <img src="uploads/<%= recipe.image %>" alt="<%= recipe.name %>" loading="lazy">
+  <!-- Room Cards -->
+  <!-- Room Cards -->
+<div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+  <% allRooms.forEach(function(room) { %>
+  <div class="col">
+    <div class="card h-100">
+      <img src="/uploads/<%= room.image %>" class="card-img-top" alt="<%= room.firstname %>">
+      <div class="card-body">
+        <h5 class="card-title">Name:<%= room.firstname %></h5>
+        <p class="card-text"><strong>Email:</strong> <%= room.email %></p>
+        <p class="card-text"><strong>Phone Number:</strong> <%= room.phonenumber.join(', ') %></p>
+        <!-- Like Button -->
+       
+        <!-- Interested Button -->
+        <button class="btn btn-success interested-btn" data-room-id="<%= room._id %>">Interested</button>
       </div>
-      <div class="pt-1"><%= recipe.name %></div>
-    </a>
-    <% }) %>
-    <% } else{ %>
-      <p>No Items Found</p>
-    <% } %>
+    </div>
   </div>
-
-</section>
-<!-- Latest items end -->
-
-<!-- Thai food items -->
-<section class="pt-4 pb-4">
-  <div class="d-flex align-items-center mb-2">
-    <h1 class="fw-bold">Thai Recipes</h1>
-    <a href="/categries/Thai" class="ms-auto">View More</a>
-  </div>
-
-
-  <div class=" row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-   <% if(typeof food.thai !== 'undefined' && food.thai.length > 0){ %>
-    <% food.thai.forEach(function(recipe,index){ %>
-    <a href="/recipe/<%= recipe._id %>" class="col text-center category__link">
-      <div class="category__img  category__img--large shadow">
-        <img src="uploads/<%= recipe.image %>" alt="<%= recipe.name %>" loading="lazy">
-      </div>
-      <div class="pt-1"><%= recipe.name %></div>
-    </a>
-    <% }) %>
-    <% } else{ %>
-      <p>No Items Found</p>
-    <% } %>
-  </div>
+  <% }); %>
+</div>
 
 </section>
 
-
-<!-- Thai items end -->
-
-<!-- American food items -->
-<section class="pt-4 pb-4">
-  <div class="d-flex align-items-center mb-2">
-    <h1 class="fw-bold">American Recipes</h1>
-    <a href="/categories/American" class="ms-auto">View More</a>
-  </div>
-
-
-  <div class=" row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-   <% if(typeof food.american !== 'undefined' && food.american.length >0){ %>
-    <% food.american.forEach(function(recipe,index){ %>
-    <a href="/recipe/<%= recipe._id %>" class="col text-center category__link">
-      <div class="category__img  category__img--large shadow">
-        <img src="uploads/<%= recipe.image %>" alt="<%= recipe.name %>" loading="lazy">
-      </div>
-      <div class="pt-1"><%= recipe.name %></div>
-    </a>
-    <% }) %>
-    <% } else{ %>
-      <p>No Items Found</p>
-    <% } %>
-  </div>
-
-</section>
-
-
-<!-- American items end -->
-
-<!-- Chinese food items -->
-<section class="pt-4 pb-4">
-  <div class="d-flex align-items-center mb-2">
-    <h1 class="fw-bold">Chinese Recipes</h1>
-    <a href="/categories/Chinese" class="ms-auto">View More</a>
-  </div>
-
-
-  <div class=" row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-   <% if(typeof food.chinese !== 'undefined' && food.chinese.length > 0){ %>
-    <% food.chinese.forEach(function(recipe,index){ %>
-    <a href="/recipe/<%= recipe._id %>" class="col text-center category__link">
-      <div class="category__img  category__img--large shadow">
-        <img src="uploads/<%= recipe.image %>" alt="<%= recipe.name %>" loading="lazy">
-      </div>
-      <div class="pt-1"><%= recipe.name %></div>
-    </a>
-    <% }) %>
-    <% } else{ %>
-      <p>No Items Found</p>
-    <% } %>
-  </div>
-
-</section>
-
-
-<!-- Chinese items end -->
-
-
-<!-- submit section -->
-<section class="px-4 py-5 my-5  text-center">
-  <img src="/img/publish-recipe.png" class="d-block mx-auto mb-4 img-fluid" alt="publish your own recipee" width="566" height="208" loading="lazy" />
-  <h1 class="display-5 fw-bold">Publish your recipee for free Today</h1>
+<!-- Publish Section -->
+<section class="px-4 py-5 my-5 text-center">
+  <img src="/img/publish-recipe.png" class="d-block mx-auto mb-4 img-fluid" alt="Publish your own recipe" width="566" height="208" loading="lazy" />
+  <h1 class="display-5 fw-bold">Publish your property for free Today</h1>
   <div class="col-lg-6 mx-auto">
-    <p class="lead mb-4">
-      Publish your recipee infront of thousands of people for free. </p>
+    <p class="lead mb-4">Publish your property in front of thousands of people for free.</p>
     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-      <a href="/submit-recipe" class="btn btn-primary btn-dark btn-lg">Submit Recipee</a>
+      <!-- <a href="/submit-recipe" class="btn btn-primary btn-dark btn-lg">Submit Recipe</a> -->
     </div>
   </div>
 </section>
-<!-- submit end -->
+<script>
+  // Like Button Click Handler
+document.querySelectorAll('.like-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const roomId = btn.getAttribute('data-room-id');
+    const response = await fetch(`/like-room/${roomId}`, { method: 'POST' });
+    const data = await response.json();
+    if (data.success) {
+      const likeCountElem = btn.nextElementSibling;
+      likeCountElem.textContent = `Likes: ${data.likeCount}`;
+    }
+  });
+});
+
+// Interested Button Click Handler
+document.querySelectorAll('.interested-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const roomId = btn.getAttribute('data-room-id');
+    const response = await fetch(`/send-email/${roomId}`, { method: 'POST' });
+    const data = await response.json();
+    if (data.success) {
+      alert('Email sent successfully to the buyer!');
+    } else {
+      alert('Failed to send email. Please try again later.');
+    }
+  });
+});
+
+</script>

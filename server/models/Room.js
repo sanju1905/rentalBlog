@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const recipeSchema=new mongoose.Schema({
-name:{
+const roomSchema=new mongoose.Schema({
+firstname:{
     type:String,
     required:'This file is required.'
 },
-description:{
+lastname:{
     type:String,
     required:'This field is required.'
 },
@@ -12,21 +12,21 @@ email:{
     type:String,
     required:'This file is required.'
 },
-ingredients:{
+phonenumber:{
     type:Array,
     required:'This field is required.'
 },
-category:{
-    type:String,
-    enum:['Thai','American','Chinese','Mexican','Indian'],
-    required:'This field is required.'
-},
+// category:{
+//     type:String,
+//     enum:['Thai','American','Chinese','Mexican','Indian'],
+//     required:'This field is required.'
+// },
 image:{
     type:String,
     required:'This file is required.'
 },
 });
-recipeSchema.index({ name: 'text', description: 'text' });
+// roomSchema.index({ name: 'text', description: 'text' });
 //wild card indexing
 // recipeSchema.index({"$**":"text" });
-module.exports= mongoose.model('Recipe',recipeSchema);
+module.exports= mongoose.model('Room',roomSchema);

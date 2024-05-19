@@ -1,0 +1,48 @@
+<div class="px-4 my-2 text-center">
+    <h1 class="display-5 fw-bold"></h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead">Find your exact Tenant with our Reasonable prices</p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form action="/register" enctype="multipart/form-data" method="post">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="firstname" class="form-label">First Name:</label>
+                    <input type="text" class="form-control" name="firstname" id="firstname" required/>
+                </div>
+
+                <div class="col-12">
+                    <label for="lastname" class="form-label">Last Name:</label>
+                    <input type="text" class="form-control" name="lastname" id="lastname" required/>
+                </div>
+
+                <div class="col-12">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" name="email" id="email" required/>
+                </div>
+
+                <div class="col-12">
+                    <label for="phonenumber" class="form-label">Phone Number:</label>
+                    <input type="text" class="form-control" name="phonenumber" id="phonenumber" required/>
+                </div>
+
+                <div class="col-12">
+                    <label for="category" class="form-label">Select Type:</label>
+                    <select class="form-select form-control" name="category" aria-label="Category" required>
+                        <option value="">--</option>
+                        <option value="Thai" class="form-control">Buyer</option>
+                        <option value="American" class="form-control">Seller</option>
+                        <!-- Add more options if needed -->
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
